@@ -60,6 +60,7 @@ class YandexSpellerAPI:
                 result: list[SpellerResult] = [
                      SpellerResult(**obj) for obj in json_data
                 ]
+                logger.info(f'{result}')
             return result
 
         except Exception as err:

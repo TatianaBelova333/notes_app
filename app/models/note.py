@@ -1,32 +1,28 @@
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text
+from datetime import datetime
+from typing import Optional
+
+from sqlalchemy import ForeignKey, String
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.sql import func
-from sqlalchemy.orm import relationship
-from sqlalchemy_utils.types.choice import ChoiceType
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.core.constants import NOTE_TITLE_LEN, PRIORITY_MAX_VAL, TAG_MAX_VAL
+from app.core.constants import NOTE_MAX_LEN, NOTE_TITLE_LEN
 from app.core.db import Base
-from app.schemas import PriorityEnum, TagEnum
+from app.models.enums import PriorityEnum, TagEnum
 
 
 class Note(Base):
     """DB model for user's notes."""
-    content = Column(Text, nullable=False)
-    created_at = Column(
-        DateTime,
-        nullable=False,
-        index=True,
-        server_default=func.now(),
-    )
-    updated_at = Column(
-        DateTime,
-        index=True,
-        onupdate=func.now(),
-    )
-    priority = Column(ChoiceType(PriorityEnum, impl=String(PRIORITY_MAX_VAL)))
-    tag = Column(ChoiceType(TagEnum, impl=String(TAG_MAX_VAL)))
-    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
-    user = relationship('User', back_populates='notes')
+    content: Mapped[str] = mapped_column(String(NOTE_MAX_LEN), nullable=False)
+    created_at: Mapped[Optional[datetime]] = mapped_column(
+        index=True, server_default=func.now())
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        index=True, onupdate=func.now())
+    priority: Mapped[PriorityEnum] = mapped_column(default=PriorityEnum.LOW)
+    tag: Mapped['TagEnum'] = mapped_column(default=TagEnum.MISCELLANEOUS)
+    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
+
+    user: Mapped['User'] = relationship(back_populates='notes')
 
     @hybrid_property
     def title(self) -> str:

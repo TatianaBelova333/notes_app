@@ -1,27 +1,11 @@
 from datetime import datetime
-from enum import Enum
 from typing import Optional
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from app.core.constants import NOTE_MAX_LEN, STR_MIN_VAL
 from app.services.spelling_check import correct_typos
-
-
-class PriorityEnum(str, Enum):
-    '''Enum class for the priority levels of notes.'''
-    HIGH = 'Важное'
-    MEDIUM = 'Среднее'
-    LOW = 'Неважное'
-
-
-class TagEnum(str, Enum):
-    '''Enum Class for note tags.'''
-    WORK = 'Работа'
-    SPORT = 'Спорт'
-    STUDY = 'Учеба'
-    SHOPPING = 'Покупки'
-    PLEASURE = 'Развлечение'
+from app.models.enums import PriorityEnum, TagEnum
 
 
 class NoteBase(BaseModel):
@@ -33,7 +17,7 @@ class NoteBase(BaseModel):
 
     content: Optional[str] = Field(None, max_length=NOTE_MAX_LEN)
     priority: Optional[PriorityEnum] = PriorityEnum.LOW
-    tag: Optional[TagEnum] = None
+    tag: Optional[TagEnum] = TagEnum.MISCELLANEOUS
 
 
 class NoteUpdate(NoteBase, extra='forbid'):
