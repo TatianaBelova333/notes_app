@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "notes-app"
+version = "0.1.0"
+description = ""
+authors = ["Tatiana Belova <tanja5676@mail.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.112.1"
+uvicorn = "^0.30.6"
+python-dotenv = "^1.0.1"
+watchgod = "^0.8.2"
+sqlalchemy = "^2.0.32"
+aiosqlite = "^0.20.0"
+alembic = "^1.13.2"
+sqlalchemy-utils = "^0.41.2"
+pydantic-settings = "^2.4.0"
+greenlet = "^3.0.3"
+fastapi-users = "^13.0.0"
+email-validator = "2.1.2"
+fastapi-users-db-sqlalchemy = "^6.0.1"
+httpx = "^0.27.0"
+psycopg2-binary = "^2.9.9"
+fastapi-filter = "^2.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
