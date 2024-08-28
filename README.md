@@ -1,6 +1,6 @@
 # Note Application
 Данное приложение предназначено для создания, обновления и просмотра личных заметок пользователя.<br>
-Для нахожедения и автоматического устранения орфографических ошибок используется Яндекс Спеллер.
+Для нахожедения и автоматического устранения орфографических ошибок используется сервис Яндекс Спеллер.
 
 ### Technology Stack
 * Python 3.12
@@ -40,7 +40,7 @@ HTTP/1.1 201 Created
 
 {
   "id": 1,
-  "email": "exammple@mail.ru",
+  "email": "example@mail.ru",
   "is_active": true,
   "is_superuser": false,
   "is_verified": false
@@ -51,7 +51,7 @@ HTTP/1.1 201 Created
 ```
 POST /auth/jwt/login
 Content-Type: application/x-www-form-urlencoded
-username=exammple@mail.ru&password=12345678
+username=example@mail.ru&password=12345678
 
 ```
 ```
@@ -110,3 +110,6 @@ HTTP/1.1 201 Created
     }
 ]
 ```
+
+### Authors
+[Tatiana Belova](https://github.com/TatianaBelova333)
