@@ -16,7 +16,7 @@
 ```
 git clone git@github.com:TatianaBelova333/notes_app.git
 ```
-2. В корне проекта создать файл .env по типу env.example
+2. В корне проекта создать файл .env по типу env.example (можно полностью скопировать)
 3. Находясь в корне проекта запустить команду
 ```
 docker compose up -d
