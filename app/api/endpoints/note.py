@@ -6,9 +6,7 @@ from app.api.filters import NoteFilter
 from app.api.validators import check_note_exists
 from app.core.db import get_async_session
 from app.core.user import current_user
-from app.crud.note import (
-    create_note, read_all_user_notes_from_db, update_note
-)
+from app.crud.note import create_note, update_note, read_all_user_notes_from_db
 from app.models import User
 from app.schemas.note import NoteCreate, NoteDB, NoteUpdate
 
@@ -21,7 +19,9 @@ async def create_new_note(note: NoteCreate,
                           user: User = Depends(current_user)):
     '''Create and return a new note.'''
 
-    new_note = await create_note(new_note=note, session=session, user=user)
+    new_note = await create_note(new_note=note,
+                                 session=session,
+                                 user=user)
     return new_note
 
 

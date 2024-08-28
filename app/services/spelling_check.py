@@ -36,7 +36,7 @@ class SpellerResult:
 
 
 class YandexSpellerAPI:
-    """Base class for requests to YandexSpeller."""
+    """Base class for handling requests to YandexSpeller."""
     URL = SPELLER_URL
     SETTINGS = SPELLER_SETTINGS
 
@@ -68,11 +68,10 @@ class YandexSpellerAPI:
 
     @staticmethod
     def get_spell_check(text: str):
-        ''''''
         return YandexSpellerAPI.__do_req(text=text)
 
 
-def correct_typos(func):
+def correct_typos(func) -> str:
     '''
     Decorator for finding and correcting typos
     with the help of Яндекс.Спеллер service.
@@ -82,19 +81,20 @@ def correct_typos(func):
 
     '''
     @wraps(func)
-    def wrapper(*args, **kwargs):
+    def wrapper(*args, **kwargs) -> str:
         text_to_correct: str = func(*args, **kwargs)
 
         speller_results: list[SpellerResult] = YandexSpellerAPI.get_spell_check(
-            text=text_to_correct
+            text=text_to_correct,
         )
 
         if speller_results is not None:
+            # set is used for removing results for repeated misspelled words
             for result in set(speller_results):
-                misspelled_word = result.word
-                # get the first suggested option as it's the closest
-                suggested_correction = result.s[0]
-                text_to_correct = text_to_correct.replace(
+                misspelled_word: str = result.word
+                # get the first suggested correction option
+                suggested_correction: str = result.s[0]
+                text_to_correct: str = text_to_correct.replace(
                     misspelled_word, suggested_correction
                 )
         return text_to_correct

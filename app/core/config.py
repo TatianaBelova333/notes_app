@@ -7,11 +7,12 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     app_name: str = 'Личные заметки'
     description: str = ('Сервис для хранения личных заметок.')
-    database_url: str = 'sqlite+aiosqlite:///./fastapi.db'
+    database_url: str = 'postgresql+asyncpg://postgres:postgres@db:5432/postgres'
     secret: str = 'SECRET'
-    model_config = SettingsConfigDict(env_file='.env')
     first_superuser_email: Optional[EmailStr] = None
     first_superuser_password: Optional[str] = None
+
+    model_config = SettingsConfigDict(env_file='.env')
 
 
 settings = Settings()

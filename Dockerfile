@@ -1,12 +1,12 @@
 FROM python:3.12
 
+EXPOSE 8000
+
 WORKDIR /app
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK=on \
     PIP_NO_CACHE_DIR=off \
     PYTHON_PATH=/app
-
-RUN pip install gunicorn==23.0.0
 
 RUN pip install "poetry==1.8.2"
 
@@ -17,4 +17,5 @@ RUN poetry config virtualenvs.create false \
 
 COPY . .
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD poetry run alembic upgrade head && \
+    poetry run uvicorn --host=0.0.0.0 app.main:app

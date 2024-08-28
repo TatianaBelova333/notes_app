@@ -12,7 +12,12 @@ from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
-from app.core.constants import PASSWORD_LEN, TOKEN_LIFETIME
+from app.core.constants import (PASS_CONTAINS_EMAIL_ERR_MSG,
+                                PASS_LEN_ERR_MSG,
+                                PASSWORD_LEN,
+                                TOKEN_LIFETIME,
+                                TOKEN_URL,
+                                USER_SUCCESS_REG_MSG)
 from app.core.db import get_async_session
 from app.models.user import User
 from app.schemas.user import UserCreate
@@ -24,7 +29,7 @@ async def get_user_db(session: AsyncSession = Depends(get_async_session)):
     yield SQLAlchemyUserDatabase(session, User)
 
 
-bearer_transport = BearerTransport(tokenUrl='auth/jwt/login')
+bearer_transport = BearerTransport(tokenUrl=TOKEN_URL)
 
 
 def get_jwt_strategy() -> JWTStrategy:
@@ -47,18 +52,19 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
     ) -> None:
         if len(password) < PASSWORD_LEN:
             raise InvalidPasswordException(
-                reason=(f'Пароль должен содержать не менее '
-                        f'{PASSWORD_LEN} символов.')
+                reason=PASS_LEN_ERR_MSG,
             )
         if user.email in password:
             raise InvalidPasswordException(
-                reason=f'Пароль не должен содержать {user.email}'
+                reason=PASS_CONTAINS_EMAIL_ERR_MSG.format(
+                    user_email=user.email,
+                )
             )
 
     async def on_after_register(
             self, user: User, request: Optional[Request] = None
     ):
-        logger.info(f'User {user.email} has been successfully registered.')
+        logger.info(USER_SUCCESS_REG_MSG.format(user_email=user.email))
 
 
 async def get_user_manager(user_db=Depends(get_user_db)):

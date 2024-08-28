@@ -66,7 +66,7 @@ async def get_note_by_id_and_user(note_id: int,
 async def update_note(db_note: NoteDB,
                       note_in: NoteUpdate,
                       session: AsyncSession) -> NoteDB:
-
+    '''Update and return a note.'''
     obj_data = jsonable_encoder(db_note)
 
     updated_data = note_in.model_dump(exclude_unset=True)
@@ -80,24 +80,3 @@ async def update_note(db_note: NoteDB,
     await session.refresh(db_note)
 
     return db_note
-
-
-"""
-async def read_all_user_notes_from_db(user: User,
-                                      session: AsyncSession) -> list[NoteDB]:
-    '''
-    Return a list of the current user's notes ordered by
-    updated_at and created_at fields in descending order.
-
-    '''
-    query_filter = product_filter.filter(select(Product))
-    db_notes = await session.execute(
-        select(Note).where(
-            Note.user_id == user.id
-        ).order_by(
-            desc(Note.updated_at),
-            desc(Note.created_at),
-        )
-    )
-    return db_notes.scalars().all()
-"""

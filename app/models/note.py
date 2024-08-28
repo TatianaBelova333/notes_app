@@ -18,8 +18,10 @@ class Note(Base):
         index=True, server_default=func.now())
     updated_at: Mapped[Optional[datetime]] = mapped_column(
         index=True, onupdate=func.now())
-    priority: Mapped[PriorityEnum] = mapped_column(default=PriorityEnum.LOW)
-    tag: Mapped['TagEnum'] = mapped_column(default=TagEnum.MISCELLANEOUS)
+    priority: Mapped[PriorityEnum] = mapped_column(
+        default=PriorityEnum.LOW, values_callable=lambda obj: [e.value for e in obj])
+    tag: Mapped[TagEnum] = mapped_column(
+        default=TagEnum.MISCELLANEOUS, values_callable=lambda obj: [e.value for e in obj])
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
 
     user: Mapped['User'] = relationship(back_populates='notes')

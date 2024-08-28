@@ -3,6 +3,7 @@ from http import HTTPStatus
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.constants import NOTE_NOT_FOUND_ERR
 from app.crud.note import get_note_by_id_and_user
 from app.models import User
 from app.schemas import NoteDB
@@ -23,6 +24,6 @@ async def check_note_exists(note_id: int,
     if note is None:
         raise HTTPException(
             status_code=HTTPStatus.NOT_FOUND,
-            detail='The note is not found.',
+            detail=NOTE_NOT_FOUND_ERR,
         )
     return note
